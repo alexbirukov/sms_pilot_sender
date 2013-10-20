@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension id="sms_pilot_sender" status="experimental" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+  <name>SMS Pilot Sender</name>
+  <description>SMS Pilot Sender plug-in for Symphony CMS</description>
+  <repo type="github">https://github.com/alexbirukov/sms_pilot_sender</repo>
+	<url type="discuss">http://getsymphony.com/discuss/thread/88994/</url>
+	<types>
+	  <type>Events</type>
+	</types>
+	<authors>
+		<author>
+			<name github="alexbirukov" symphony="alexbirukov">Александр Бирюков</name>
+			<website>http://alexbirukov.ru/</website>
+		</author>
+	</authors>
+	<releases>
+		<release version="0.1" date="2013-10-19" min="2.3.3" >
+			- Первая версия.
+		</release>
+	</releases>
+</extension>
