@@ -3,9 +3,9 @@ SMS Pilot Sender
 
 SMS Pilot Sender plug-in for Symphony CMS
 
-- Version: 0.1
+- Version: 0.2
 - Author: Alexander Biryukov
-- Build Date: 19 October 2013
+- Build Date: 20 October 2013
 - Requirements: Symphony 2.3.3
 
 ## Installation
@@ -15,6 +15,12 @@ SMS Pilot Sender plug-in for Symphony CMS
 3. You can now edit the SMS Pilot Sender setting in the configuration section from within the Symphony administration interface.
 
 ## Change Log
+
+Version 0.2 - 20 October 2013
+
+- bug fix;
+- create settings;
+- auto fill senders field;
 
 Version 0.1 - 19 October 2013
 
