@@ -14,12 +14,12 @@
 		</author>
 	</authors>
 	<releases>
-		<release version="0.2" date="2013-10-20" min="2.3.3" max="2.3.3" >
+		<release version="0.2" date="2013-10-20" min="2.3.3" max="2.3.4" >
 			- bug fix;
 			- create settings;
 			- auto fill senders field;
 		</release>
-		<release version="0.1" date="2013-10-19" min="2.3.3" max="2.3.3" >
+		<release version="0.1" date="2013-10-19" min="2.3.3" max="2.3.4" >
 			- first version.
 		</release>
 	</releases>
