@@ -169,106 +169,108 @@
 		 */
 		public function __eventFinalSaveFilter($context){
 			
-			// Errors
-			// Список ошибок
-			$sms_errors = array();
-			$sms_errors['10'] = __('INPUT data is required');
-			$sms_errors['11'] = __('Unknown INPUT format');
-			$sms_errors['12'] = __('XML structure is invalid');
-			$sms_errors['13'] = __('JSON structure is invalid');
-			$sms_errors['14'] = __('Unknown COMMAND');
-			$sms_errors['100'] = __('APIKEY is required');
-			$sms_errors['101'] = __('APIKEY is invalid');
-			$sms_errors['106'] = __('APIKEY is blocked (spam)');
-			$sms_errors['110'] = __('SYSTEM ERROR');
-			$sms_errors['113'] = __('IP RESTRICTION');
-			$sms_errors['201'] = __('FROM is invalid');
-			$sms_errors['202'] = __('FROM is depricated');
-			$sms_errors['204'] = __('FROM not found');
-			$sms_errors['210'] = __('TO is required');
-			$sms_errors['211'] = __('TO is invalid');
-			$sms_errors['212'] = __('TO is depricated');
-			$sms_errors['213'] = __('Unsupported zone');
-			$sms_errors['220'] = __('TEXT is required');
-			$sms_errors['221'] = __('TEXT too long');
-			$sms_errors['230'] = __('ID is invalid');
-			$sms_errors['231'] = __('PACKET_ID is invalid');
-			$sms_errors['240'] = __('Invalid INPUT list');
-			$sms_errors['241'] = __('You don\'t have enough credit');
-			$sms_errors['242'] = __('SMS count limit (trial)');
-			$sms_errors['243'] = __('Loop protection');
-			$sms_errors['250'] = __('SEND_DATETIME is invalid');
-			$sms_errors['300'] = __('SMS server_id is required');
-			$sms_errors['301'] = __('SMS server_id is invalid');
-			$sms_errors['302'] = __('SMS server_id not found');
-			$sms_errors['303'] = __('Invalid SMS check list');
-			$sms_errors['304'] = __('SERVER_PACKET_ID is invalid');
-			$sms_errors['400'] = __('User not found');
-			$sms_errors['401'] = __('Invalid login details');
+			if (in_array('smspilot', $context['event']->eParamFILTERS)) {
 			
-			// Send SMS
-			// Отправка СМС
-			
-			// Get settings
-			// Получаем настроки
-			$apikey = Symphony::Configuration()->get('api_key', 'smspilot');
-			// API для отладки
-			//$apikey = 'XXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZXXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZ';
-			$phones = Symphony::Configuration()->get('phones', 'smspilot');
-			$message = Symphony::Configuration()->get('message', 'smspilot');
-			$from = Symphony::Configuration()->get('from', 'smspilot');
-
-			
-			// API 2
-			$send = array(
-				'apikey' => $apikey,
-				'send' => array(
-					array('from' => $from, 'to' => $phones, 'text' => $message)
-				)
-			);
-			$result = file_get_contents("http://smspilot.ru/api2.php?r=6708", false, stream_context_create(array(
-				"http" => array(
-					"method" => "POST",
-					"header" => "Content-Type: application/json\r\n",
-					"content" => json_encode( $send ),
-				),
-			)));
-			
-			// Get response
-			$response = json_decode($result);
-			
-			// Check response			
-			if (isset($response->{'error'}->{'code'})) {
-				$context['errors'][] = array(
-					'smspilot', 
-					FALSE, 
-					$sms_errors[$response->{'error'}->{'code'}]
-				);
+				// Errors
+				// Список ошибок
+				$sms_errors = array();
+				$sms_errors['10'] = __('INPUT data is required');
+				$sms_errors['11'] = __('Unknown INPUT format');
+				$sms_errors['12'] = __('XML structure is invalid');
+				$sms_errors['13'] = __('JSON structure is invalid');
+				$sms_errors['14'] = __('Unknown COMMAND');
+				$sms_errors['100'] = __('APIKEY is required');
+				$sms_errors['101'] = __('APIKEY is invalid');
+				$sms_errors['106'] = __('APIKEY is blocked (spam)');
+				$sms_errors['110'] = __('SYSTEM ERROR');
+				$sms_errors['113'] = __('IP RESTRICTION');
+				$sms_errors['201'] = __('FROM is invalid');
+				$sms_errors['202'] = __('FROM is depricated');
+				$sms_errors['204'] = __('FROM not found');
+				$sms_errors['210'] = __('TO is required');
+				$sms_errors['211'] = __('TO is invalid');
+				$sms_errors['212'] = __('TO is depricated');
+				$sms_errors['213'] = __('Unsupported zone');
+				$sms_errors['220'] = __('TEXT is required');
+				$sms_errors['221'] = __('TEXT too long');
+				$sms_errors['230'] = __('ID is invalid');
+				$sms_errors['231'] = __('PACKET_ID is invalid');
+				$sms_errors['240'] = __('Invalid INPUT list');
+				$sms_errors['241'] = __('You don\'t have enough credit');
+				$sms_errors['242'] = __('SMS count limit (trial)');
+				$sms_errors['243'] = __('Loop protection');
+				$sms_errors['250'] = __('SEND_DATETIME is invalid');
+				$sms_errors['300'] = __('SMS server_id is required');
+				$sms_errors['301'] = __('SMS server_id is invalid');
+				$sms_errors['302'] = __('SMS server_id not found');
+				$sms_errors['303'] = __('Invalid SMS check list');
+				$sms_errors['304'] = __('SERVER_PACKET_ID is invalid');
+				$sms_errors['400'] = __('User not found');
+				$sms_errors['401'] = __('Invalid login details');
 				
-				// Делаем запись в лог системы
-				Symphony::Log()->pushToLog(__('SMSPilot sender: ') . $sms_errors[$response->{'error'}->{'code'}], 1, true);
-			}	
-			else
-			{
-				if ($response->{'send'}[0]->{'error'} != 0) {
+				// Send SMS
+				// Отправка СМС
+				
+				// Get settings
+				// Получаем настроки
+				$apikey = Symphony::Configuration()->get('api_key', 'smspilot');
+				// API для отладки
+				//$apikey = 'XXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZXXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZ';
+				$phones = Symphony::Configuration()->get('phones', 'smspilot');
+				$message = Symphony::Configuration()->get('message', 'smspilot');
+				$from = Symphony::Configuration()->get('from', 'smspilot');
+
+				
+				// API 2
+				$send = array(
+					'apikey' => $apikey,
+					'send' => array(
+						array('from' => $from, 'to' => $phones, 'text' => $message)
+					)
+				);
+				$result = file_get_contents("http://smspilot.ru/api2.php?r=6708", false, stream_context_create(array(
+					"http" => array(
+						"method" => "POST",
+						"header" => "Content-Type: application/json\r\n",
+						"content" => json_encode( $send ),
+					),
+				)));
+				
+				// Get response
+				$response = json_decode($result);
+				
+				// Check response			
+				if (isset($response->{'error'}->{'code'})) {
 					$context['errors'][] = array(
 						'smspilot', 
 						FALSE, 
-						$sms_errors[$response->{'send'}[0]->{'error'}]
+						$sms_errors[$response->{'error'}->{'code'}]
 					);
 					
 					// Делаем запись в лог системы
-					Symphony::Log()->pushToLog(__('SMSPilot sender: ') . $sms_errors[$response->{'send'}[0]->{'error'}], 1, true);
-				}
+					Symphony::Log()->pushToLog(__('SMSPilot sender: ') . $sms_errors[$response->{'error'}->{'code'}], 1, true);
+				}	
 				else
 				{
-					$context['errors'][] = array(
-						'smspilot', 
-						TRUE
-					);
+					if ($response->{'send'}[0]->{'error'} != 0) {
+						$context['errors'][] = array(
+							'smspilot', 
+							FALSE, 
+							$sms_errors[$response->{'send'}[0]->{'error'}]
+						);
+						
+						// Делаем запись в лог системы
+						Symphony::Log()->pushToLog(__('SMSPilot sender: ') . $sms_errors[$response->{'send'}[0]->{'error'}], 1, true);
+					}
+					else
+					{
+						$context['errors'][] = array(
+							'smspilot', 
+							TRUE
+						);
+					}
 				}
 			}
-			
 		}
 		
 		/**
@@ -278,7 +280,8 @@
 		public function __appendEventFilter(array $context) {
 			$context['options'][] = array(
 				'smspilot',
-				is_array($context['selected']) ? in_array('smspilot', $context['selected']) : false,
+				is_array($context['selected']) && in_array('smspilot', $context['selected']),
+				//is_array($context['selected']) ? in_array('smspilot', $context['selected']) : false,
 				__('SMS Pilot: Send SMS')
 			);
 		}
